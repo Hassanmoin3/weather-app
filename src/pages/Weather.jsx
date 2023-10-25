@@ -12,8 +12,6 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 function Weather() {
-  // State for storing the selected temperature unit (Celsius or Fahrenheit)
-  // const [temperatureUnit, setTemperatureUnit] = useState('Celsius');
   const { temperatureUnit, toggleTemperatureUnit } = useTemperatureContext();
   const { locationId } = useParams(); // Get the location ID from the URL params
   const [weatherData, setWeatherData] = useState(null);
@@ -23,22 +21,12 @@ function Weather() {
     setCurrentHour(newValue);
   };
 
-  // Function to toggle the temperature unit
-  // const toggleTemperatureUnit = (unit) => {
-  //   setTemperatureUnit(unit);
-  // };
-
-  useEffect(() => { // Get saved locations from local storage
+  useEffect(() => {
     const savedLocations = JSON.parse(localStorage.getItem('locations'));
-
-    // Find the location with matching locationId
     const location = savedLocations.find((loc) => loc.id === locationId);
     const fetchWeatherDetails = async () => {
       try {
         const response = await getWeatherDetails(location);
-        // setWeatherData(response);
-
-        // need to change it 
         getLocationData(location.name)
           .then((data) => setWeatherData({ ...response, current: data.current }))
           .catch((error) => console.error('Error fetching weather data:', error));
@@ -50,13 +38,12 @@ function Weather() {
 
     if (location) {
       fetchWeatherDetails();
-      // Update the page title using React Helmet
       document.title = `Weather App - ${location.name}`;
     }
   }, []);
 
   if (!weatherData) {
-    return <CircularProgress className='loader' />;
+    return null
   }
 
   const { location, current, forecast } = weatherData;
@@ -71,7 +58,7 @@ function Weather() {
     <Wrapper>
       <Container component="main" sx={{ mt: 8, mb: 2 }} maxWidth="lg">
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Typography variant="h5" style={headingStyles}>Weather Application</Typography>
+          <Typography variant="h5" style={headingStyles}>Weather App</Typography>
           <Grid sx={{ display: 'flex', justifyContent: 'space-between'}}>
             <Button component={Link} to="/" variant="outlined" color="primary" sx={{ marginRight: '20px' }}>
               Back
@@ -96,11 +83,10 @@ function Weather() {
         >
           {forecast?.forecastday[0].hour.reduce((acc, hour, i) => {
               if (i % 4 === 0) {
-                // Create a new slide for every 4 hours
                 acc.push(
                   <Grid container key={"hour" + i}>
                     {forecast?.forecastday[0].hour.slice(i, i + 4).map((hour, j) => (
-                      <WeatherHour key={"hour" + i} hour={hour} current={current} />
+                      <WeatherHour key={"hour" + (i+j+1000)} hour={hour} current={current} />
                     ))}
                   </Grid>
               );

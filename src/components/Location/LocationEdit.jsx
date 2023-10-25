@@ -25,7 +25,6 @@ const LocationEdit = ({ locations, setLocations, editLocation, setEditLocation, 
     const existingLocation = locations.find((location) => location.id === editLocation?.id);
 
     if (existingLocation) {
-      // Edit the existing location
       const updatedLocation = {
         ...existingLocation,
         name: searchText,

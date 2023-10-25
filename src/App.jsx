@@ -21,12 +21,9 @@ function App() {
           </Helmet>
         </HelmetProvider>
         <BrowserRouter>
-          {/* Set up React Router routes */}
           <Routes>
-            {/* Route to the location details page */}
-            <Route path="/:locationId" element={<Weather />} />
-            {/* Default route for the location list */}
             <Route path="/" element={<Location />} />
+            <Route path="/:locationId" element={<Weather />} />
           </Routes>
         </BrowserRouter>
       </Wrapper>

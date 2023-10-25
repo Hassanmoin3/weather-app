@@ -18,11 +18,9 @@ function Location() {
   const getCurrentCountry = () => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
-        // Get the user's current coordinates
         const { latitude, longitude } = position.coords;
         const { location } = await getLocationData(`${latitude}, ${longitude}`, temperatureUnit);
 
-        // Create a location object
         const newLocation = {
           ...location,
           id: uuidv4(),
@@ -45,7 +43,6 @@ function Location() {
     if (savedLocations) {
       setLocations(savedLocations);
     } else {
-      // If no locations are found in local storage, set default locations
       if ("geolocation" in navigator) {
         getCurrentCountry();
       } else {
@@ -54,16 +51,16 @@ function Location() {
     }
   }, []);
 
+  document.title = `Weather App`;
+
   return (
     <Wrapper>
       <Container component="main" sx={{ mt: 8, mb: 2 }} maxWidth="sm">
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Typography variant="h4">Weather App</Typography>
-          {/* Temperature unit toggle */}
           <TemperatureToggle unit={temperatureUnit} toggleUnit={toggleTemperatureUnit} />
         </Box>
         <LocationSearch locations={locations} setLocations={setLocations} />
-        {/* Location list component */}
         <LocationList locations={locations} setLocations={setLocations} unit={temperatureUnit} />
       </Container>
     </Wrapper>

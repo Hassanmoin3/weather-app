@@ -17,6 +17,11 @@ const LocationItem = ({ location, unit, handleToggleFavorite, handleDeleteLocati
       .catch((error) => console.error('Error fetching weather data:', error));
   }, [location.name, unit]);
 
+  if (!weather || !location) {
+    return null;
+  }
+
+
   return (
     <div className='location-item'>
       <Grid container spacing={2}>
